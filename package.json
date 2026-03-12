@@ -12,7 +12,9 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
     "auth:generate": "npx auth@latest generate",
-    "auth:secret": "npx auth@latest secret"
+    "auth:secret": "npx auth@latest secret",
+    "postinstall": "prisma generate",
+    "tsc": "tsc --noEmit"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.6",
