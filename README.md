@@ -8,6 +8,7 @@ NestJS API with **Better Auth** and **Prisma** (PostgreSQL).
 - **Better Auth** – authentication (email/password, sessions)
 - **Prisma** – ORM with PostgreSQL
 - **@thallesp/nestjs-better-auth** – NestJS integration (guards, decorators)
+- **Swagger** – OpenAPI documentation at `/docs`
 
 ## Setup
 
@@ -48,6 +49,10 @@ npm run start:dev
 npm run build
 npm run start:prod
 ```
+
+## API documentation (Swagger)
+
+Interactive OpenAPI docs are available at **`/docs`** when the app is running (e.g. `http://localhost:3000/docs`). Use them to explore and try endpoints.
 
 ## Auth routes
 
