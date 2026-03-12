@@ -1,0 +1,33 @@
+{
+  "name": "trekking-food-api-v2",
+  "version": "1.0.0",
+  "description": "NestJS API with Better Auth and Prisma PostgreSQL",
+  "scripts": {
+    "build": "nest build",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/main",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio",
+    "auth:generate": "npx auth@latest generate",
+    "auth:secret": "npx auth@latest secret"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.1.6",
+    "@nestjs/core": "^11.1.6",
+    "@nestjs/platform-express": "^11.1.6",
+    "@prisma/client": "^6.9.0",
+    "@thallesp/nestjs-better-auth": "^2.5.0",
+    "better-auth": "^1.2.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.0",
+    "@types/node": "^22.10.2",
+    "prisma": "^6.9.0",
+    "typescript": "^5.7.2"
+  }
+}
