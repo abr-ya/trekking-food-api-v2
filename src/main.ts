@@ -7,6 +7,9 @@ async function bootstrap() {
     bodyParser: false, // Required for Better Auth to handle raw request body
   });
 
+  const { getCorsOptions } = await import('./cors');
+  app.enableCors(getCorsOptions());
+
   const config = new DocumentBuilder()
     .setTitle('Trekking Food API')
     .setDescription('API documentation for Trekking Food – auth via Better Auth at `/api/auth/*`')

@@ -1,6 +1,7 @@
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { prisma } from './db';
+import { corsOrigins } from './cors';
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -9,6 +10,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  trustedOrigins: corsOrigins,
   experimental: {
     joins: true,
   },
