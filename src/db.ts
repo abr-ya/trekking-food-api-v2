@@ -1,15 +1,13 @@
 import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+
+const connectionString = process.env.DATABASE_URL!;
+const adapter = new PrismaPg({ connectionString });
 
 export const prisma = new PrismaClient({
+  adapter,
   log: process.env.NODE_ENV === 'development' ? ['query', 'info', 'warn', 'error'] : ['error'],
   errorFormat: 'pretty',
-  // Important: pool settings
-  datasources: {
-    db: {
-      url: process.env.DATABASE_URL,
-      // For timeouts, add to DATABASE_URL: ?connect_timeout=30&options=-c%20statement_timeout%3D30000
-    },
-  },
 });
 
 // Important: error handling
