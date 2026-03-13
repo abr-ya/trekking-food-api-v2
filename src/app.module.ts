@@ -6,10 +6,12 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
+import { TestModule } from './test/test.module';
 
 @Module({
   imports: [
     PrismaModule,
+    TestModule,
     AuthModule.forRoot({
       auth,
       middleware: (req, res, next) => {

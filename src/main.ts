@@ -16,6 +16,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('app', 'Health and root')
     .addTag('users', 'User profile and public routes')
+    .addTag('test', 'DB connectivity and diagnostics')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
