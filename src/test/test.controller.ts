@@ -156,4 +156,53 @@ export class TestController {
       });
     });
   }
+
+  @Get('auth-check')
+  @AllowAnonymous()
+  @ApiOperation({
+    summary: 'Authentication check',
+    description:
+      'Returns auth-related env (BETTER_AUTH_URL, FRONTEND_URL, secret presence), cookie settings (secure, sameSite, httpOnly), and session placeholder. Useful for debugging auth/CORS setup.',
+  })
+  @ApiResponse({
+    status: 200,
+    description:
+      'Returns timestamp, env (nodeEnv, betterAuthUrl, frontendUrl, betterAuthSecret status, length), cookies (headers, settings, optional error), and session.',
+  })
+  async checkAuth() {
+    const cookieSettings = {
+      secure: true,
+      sameSite: 'lax' as const,
+      httpOnly: true,
+    };
+
+    const results: {
+      timestamp: string;
+      env: Record<string, unknown>;
+      cookies: { headers: null; settings: typeof cookieSettings | null; error?: string };
+      session: null;
+    } = {
+      timestamp: new Date().toISOString(),
+      env: {
+        nodeEnv: process.env.NODE_ENV,
+        betterAuthUrl: process.env.BETTER_AUTH_URL,
+        frontendUrl: process.env.FRONTEND_URL,
+        betterAuthSecret: process.env.BETTER_AUTH_SECRET ? '✅ установлен' : '❌ отсутствует',
+        betterAuthSecretLength: process.env.BETTER_AUTH_SECRET?.length ?? 0,
+      },
+      cookies: {
+        headers: null,
+        settings: cookieSettings,
+      },
+      session: null,
+    };
+
+    try {
+      // Cookie settings applied above; add any extra checks here if needed
+    } catch (error: unknown) {
+      results.cookies.error = error instanceof Error ? error.message : String(error);
+    }
+
+    return results;
+  }
 }
