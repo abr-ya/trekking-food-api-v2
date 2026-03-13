@@ -14,4 +14,12 @@ export const auth = betterAuth({
   experimental: {
     joins: true,
   },
+  advanced: {
+    useSecureCookies: true,
+    defaultCookieAttributes: {
+      sameSite: 'none',
+      secure: true,
+      partitioned: true,
+    },
+  },
 });
