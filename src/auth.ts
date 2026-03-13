@@ -1,6 +1,7 @@
 import { betterAuth } from 'better-auth';
 import { createAuthMiddleware } from 'better-auth/api';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
+import { admin } from 'better-auth/plugins';
 import { prisma } from './db';
 import { corsOrigins } from './cors';
 
@@ -12,6 +13,14 @@ export const auth = betterAuth({
     enabled: true,
   },
   trustedOrigins: corsOrigins,
+  plugins: [
+    admin({
+      defaultRole: 'user',
+      adminRoles: ['admin'],
+      // Optional: grant admin by user id without setting role in DB
+      // adminUserIds: [process.env.FIRST_ADMIN_ID ?? ''],
+    }),
+  ],
   experimental: {
     joins: true,
   },

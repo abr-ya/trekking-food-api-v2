@@ -1,6 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Session, UserSession, AllowAnonymous, OptionalAuth } from '@thallesp/nestjs-better-auth';
+import {
+  Session,
+  UserSession,
+  AllowAnonymous,
+  OptionalAuth,
+  Roles,
+} from '@thallesp/nestjs-better-auth';
 
 @ApiTags('users')
 @Controller('users')
@@ -11,6 +17,16 @@ export class UsersController {
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
   async getProfile(@Session() session: UserSession) {
     return { user: session.user };
+  }
+
+  @Get('admin-only')
+  @Roles(['admin'])
+  @ApiOperation({ summary: 'Admin-only route (requires user.role = admin)' })
+  @ApiResponse({ status: 200, description: 'Success for admins.' })
+  @ApiResponse({ status: 403, description: 'Forbidden – not admin.' })
+  @ApiResponse({ status: 401, description: 'Unauthorized.' })
+  async adminOnly(@Session() session: UserSession) {
+    return { message: 'Admin access OK', user: session.user };
   }
 
   @Get('public')
