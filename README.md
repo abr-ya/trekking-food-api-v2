@@ -74,6 +74,31 @@ async getProfile(@Session() session: UserSession) {
 }
 ```
 
+## API examples
+
+### Create recipe with ingredients
+
+Authenticated request to create a recipe (requires valid session cookie or auth header):
+
+```http
+POST /recipes
+Content-Type: application/json
+```
+
+```json
+{
+  "name": "Buckwheat porridge",
+  "categoryId": "<RecipeCategory.id>",
+  "description": "Simple breakfast",
+  "ingredients": [
+    { "productId": "<Product.id>", "quantity": 200 },
+    { "productId": "<Product.id>", "quantity": 50 }
+  ]
+}
+```
+
+Replace `<RecipeCategory.id>` and `<Product.id>` with real IDs from your DB (e.g. from Prisma Studio or `GET /products`). Responses include `category` and `ingredients` (with nested `product`) where relevant.
+
 ## Scripts
 
 | Script              | Description                    |
