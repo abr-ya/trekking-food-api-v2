@@ -30,6 +30,12 @@ cp .env.example .env
 - **BETTER_AUTH_SECRET** – generate with `npm run auth:secret`
 - **BETTER_AUTH_URL** – your app URL (e.g. `http://localhost:3000`)
 
+**Optional – timeouts (avoid long hangs when DB is unreachable):**
+
+- **DB_CONNECT_TIMEOUT_SEC** – max seconds to wait for a DB connection (default: `10`). Uses `pg`’s `connectionTimeoutMillis`.
+- **DB_QUERY_TIMEOUT_MS** – max milliseconds per query (default: `30000`). Sent to PostgreSQL as `statement_timeout`.
+- **REQUEST_TIMEOUT_MS** – max milliseconds for any HTTP request (default: `30000`). If exceeded, the server responds with **504 Gateway Timeout** (e.g. login no longer hangs for minutes when the DB is down).
+
 ### 3. Database
 
 Generate Prisma Client and run migrations:
@@ -43,7 +49,7 @@ npm run prisma:migrate
 
 ```bash
 # Development
-npm run start:dev
+npm run dev
 
 # Production build
 npm run build
@@ -109,3 +115,13 @@ Replace `<RecipeCategory.id>` and `<Product.id>` with real IDs from your DB (e.g
 | `npm run prisma:migrate`   | Run DB migrations       |
 | `npm run prisma:studio`   | Open Prisma Studio      |
 | `npm run auth:secret`     | Generate auth secret    |
+
+## Troubleshooting
+
+### "Connection terminated unexpectedly" (e.g. during login)
+
+This usually means the **database closed an idle connection** (or the network dropped it), and the next request tried to use that dead connection. Common with serverless Postgres (e.g. Neon).
+
+**What the app does:** The pool is configured with `idleTimeoutMillis` (release idle connections after 20s) and `keepAlive: true` so connections are less likely to be dropped. If it still happens occasionally, the next request will open a new connection and succeed.
+
+**If you use Neon:** Prefer the **pooler** connection string (hostname often ends with `-pooler`) so PgBouncer manages connections. See [Neon: Connection pooling](https://neon.tech/docs/connect/connection-pooling).

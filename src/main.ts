@@ -3,9 +3,24 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
+const REQUEST_TIMEOUT_MS = Number(process.env.REQUEST_TIMEOUT_MS) || 30_000;
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bodyParser: false, // Required for Better Auth to handle raw request body
+  });
+
+  // Prevent any request (including login) from hanging when DB is slow/unreachable
+  app.use((_req: unknown, res: { setTimeout: (ms: number, fn: () => void) => void; headersSent: boolean; status: (code: number) => { json: (body: object) => void }; end?: () => void }, next: () => void) => {
+    res.setTimeout(REQUEST_TIMEOUT_MS, () => {
+      if (!res.headersSent) {
+        res.status(504).json({
+          error: 'Gateway Timeout',
+          message: `Request did not complete within ${REQUEST_TIMEOUT_MS / 1000}s. Database may be unreachable.`,
+        });
+      }
+    });
+    next();
   });
 
   const { getCorsOptions } = await import('./cors');
